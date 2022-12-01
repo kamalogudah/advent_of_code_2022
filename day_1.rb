@@ -1,15 +1,25 @@
-def get_highest_calories(input)
-  # sum each array
+def parse_input(input)
   splitted_array = input.split("\n\n")
   flashy = []
   splitted_array.each do |s|
     flashy << s.split("\n").map(&:to_i).reduce(&:+)
   end
+  flashy
+end
 
+def get_highest_calories(input)
   # sort the summed arrays
-  sorted_array = flashy.sort
+  sorted_array = parse_input(input).sort
   #   pick last of the sorted arrays
-  p sorted_array.last
+  sorted_array.last
+end
+
+def top_elfs(input)
+  # sort the summed arrays
+  three_top = parse_input(input).sort.last(3)
+
+ three_top.reduce(&:+)
+
 end
 input =
   "2159
@@ -2260,5 +2270,5 @@ input =
 2405
 6625
 1317"
-
-get_highest_calories(input)
+puts "Part 1 Answer: #{get_highest_calories(input)}"
+puts "Part 2 Answer: #{top_elfs(input)}"
