@@ -12,19 +12,64 @@ def total_score(input)
   my_total = []
   input.each do |data|
     new_data = data.split(' ')
-    opponent = new_data.first.to_sym
+    opponent = new_data.first
 
-    me = new_data.last.to_sym
-    barren(opponent, me, opponent_total, my_total)
-    rock_wins(opponent, me, opponent_total, my_total)
-    paper_wins(opponent, me, opponent_total, my_total)
-    scissor_wins(opponent, me, opponent_total, my_total)
+    me = new_data.last
+    # X means you need to lose,
+    if me == 'X'
+
+      i_lose(opponent, 'Z', opponent_total, my_total) if opponent == 'A'
+      i_lose(opponent, 'X', opponent_total, my_total) if opponent == 'B'
+      i_lose(opponent, 'Y', opponent_total, my_total) if opponent == 'C'
+    end
+
+    # Y means you need to end the round in a draw, and
+    if me == 'Y'
+      we_draw(opponent, 'X', opponent_total, my_total) if opponent == 'A'
+      we_draw(opponent, 'Y', opponent_total, my_total) if opponent == 'B'
+      we_draw(opponent, 'Z', opponent_total, my_total) if opponent == 'C'
+
+    end
+    # Z means you need to win
+    next unless me == 'Z'
+
+    i_win(opponent, 'Y', opponent_total, my_total) if opponent == 'A'
+    i_win(opponent, 'Z', opponent_total, my_total) if opponent == 'B'
+    i_win(opponent, 'X', opponent_total, my_total) if opponent == 'C'
   end
   [opponent_total.reduce(&:+), my_total.reduce(&:+)]
 end
 
+def i_lose(opponent, me, opponent_total, my_total)
+  if opponent == 'A'
+    rock_wins(opponent.to_sym, me.to_sym, opponent_total, my_total)
+  elsif opponent == 'B'
+    paper_wins(opponent.to_sym, me.to_sym, opponent_total, my_total)
+  elsif opponent == 'C'
+    scissor_wins(opponent.to_sym, me.to_sym, opponent_total, my_total)
+  end
+end
+
+def i_win(opponent, me, opponent_total, my_total)
+  if opponent == 'A'
+    paper_wins(opponent.to_sym, me.to_sym, opponent_total, my_total)
+
+  elsif opponent == 'B'
+    scissor_wins(opponent.to_sym, me.to_sym, opponent_total, my_total)
+  elsif opponent == 'C'
+
+    rock_wins(opponent.to_sym, me.to_sym, opponent_total, my_total)
+  end
+end
+
+def we_draw(opponent, me, opponent_total, my_total)
+  barren(opponent.to_sym, me.to_sym, opponent_total, my_total)
+end
+
+
 def parse_input(input)
-  input.split("\n")
+  splitted_array = input.split("\n")
+  splitted_array
 end
 
 def barren(them, us, opponent_total, my_total)
